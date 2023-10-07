@@ -1,5 +1,5 @@
 # Introduction
- A simple introduction to statistical learning in time-series forecasting. This package enables you to build, train and test a time-series forcasting model using the Simple Exponential Smoothing method. Learn more here: https://machinelearningmastery.com/exponential-smoothing-for-time-series-forecasting-in-python/ 
+ A simple introduction to statistical learning in time-series forecasting. This model is a very lightweight and easy to understand example of model traning, testing and implementation. It is a useful starting point for anyone who is curious about these topics and wants a simple example to get started. The package enables one to build, train and test a time-series forcasting model using the Simple Exponential Smoothing method. Learn more here: https://machinelearningmastery.com/exponential-smoothing-for-time-series-forecasting-in-python/ 
 
 # Usage 
 Download and run the package on your local system. Python version 3.10.0 or greater is advised.
