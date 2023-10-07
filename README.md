@@ -12,6 +12,8 @@ Simply put, training the model involves finding the "alpha" value that minimizes
 
 ![image](https://github.com/akomarla/ExpSmoothing/assets/124313756/15ee78b6-024c-4f49-b730-2d40dba3fb46)
 
+Where n represents the number of time-series in the data set, and e is the difference between the true and forecasted values for a particular time series. 
+
 ## Implementation 
 This model is trained and tested on the M4 dataset of the Makridakis Time-Series Forecasting Competition: https://github.com/Mcompetitions/M4-methods/tree/master/Dataset (Daily-train.csv and Daily-test.csv) using the mean absolute percentage error metric from the table above. 
 
