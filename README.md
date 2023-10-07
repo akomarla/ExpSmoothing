@@ -8,7 +8,7 @@ Download and run the package on your local system. Python version 3.10.0 or grea
 Simple Exponential Smoothing can be interpreted as a weighted average of the time-series values, wherein the weights are either exponentially increasing (greater importance to future values in the time-series) or exponentially decreasing (greater importance to earlier values in the time-series). The "alpha" value or the smoothing parameter lies between 0 and 1: the greater the value of alpha, the greater is the exponentially increasing nature of the weights.
 
 ## Error metrics 
-Simply put, training the model involves finding the "alpha" value that minimizes the error (difference between true and forecasted values). In this implementation, one can choose from the following error metrics to obtain the optimal "alpha" value: 
+Simply put, training the model involves finding the "alpha" value that minimizes the forecast error (difference between true and forecasted values). In this implementation, one can choose from the following error metrics to obtain the optimal "alpha" value: 
 
 ![image](https://github.com/akomarla/ExpSmoothing/assets/124313756/15ee78b6-024c-4f49-b730-2d40dba3fb46)
 
