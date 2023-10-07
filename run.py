@@ -6,9 +6,9 @@
 url = 'https://raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset/Train/Daily-train.csv'
 # Get training data as dataframes
 raw = pd.read_csv(url)
-cols = ['V'+str(i) for i in range(2,201)]
+cols = ['V'+str(i) for i in range(2,401)]
 train = raw[cols]
-train_true = raw['V201']
+train_true = raw['V401']
 # Convert to correct data type to run the model 
 train = train.values.tolist()
 train_true = [[val] for val in train_true.tolist()]
@@ -17,9 +17,9 @@ train_true = [[val] for val in train_true.tolist()]
 url = 'https://raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset/Train/Daily-train.csv'
 # Get testing data as dataframes
 raw = pd.read_csv(url)
-cols = ['V'+str(i) for i in range(2,201)]
+cols = ['V'+str(i) for i in range(2,401)]
 test = raw[cols]
-test_true = raw['V201']
+test_true = raw['V401']
 # Convert to correct data type to run the model 
 test = test.values.tolist()
 test_true = [[val] for val in test_true.tolist()]
