@@ -6,7 +6,6 @@ Created on Fri Oct  6 18:43:53 2023
 """
 
 from model import *
-
 import pandas as pd
 import numpy as np
 import logging
@@ -19,3 +18,4 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
 import sklearn.metrics as metrics
 from sklearn.model_selection import train_test_split
+from scipy import stats

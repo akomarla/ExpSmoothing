@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-
 
+from model import *
+import pandas as pd
+import numpy as np
+import logging
+import os
+import pyodbc as po
+from datetime import datetime
+from tqdm import tqdm
+import copy
+import matplotlib.pyplot as plt
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
+import sklearn.metrics as metrics
+from sklearn.model_selection import train_test_split
+from scipy import stats
+
 ##############################################################################################################################################################
 
 # Getting training time series from M4 forecasting competition training set
@@ -28,10 +43,19 @@ test_true = [[val] for val in test_true.tolist()]
 
 # Train the exponential smoothing model - learn the best alpha parameter by minimizing the mean abs % error
 es = ExpSmoothing()
-es.train(train, train_true, 'mean absolute percentage error', 1)
-
+es.train(train_data = train, 
+         train_true_values = train_true, 
+         error = 'mean absolute percentage error', 
+         num_gen = 1, 
+         remove_outliers = False, 
+         non_neg = False, 
+         non_zero = False)
 # Test the model
-ft, error = es.test(test, test_true)
+ft, error = es.test(test_data = test, 
+                    test_true_values = test_true, 
+                    remove_outliers = False, 
+                    non_neg = False, 
+                    non_zero = False)
 
 # Print model results
 print('Model results')
@@ -50,8 +74,11 @@ ft_avg = []
 ft_exp_smooth = []
 for t in test:
     ts = Analyze(values = t, labels = None)
+    # Find average of non-negative values only
     ft_avg_non_neg.append(ts.forecast(how = 'average non-neg'))
+    # Find average of all values only
     ft_avg.append(ts.forecast(how = 'average'))
+    # Find exponential smoothing forecast using parameter learned from training
     ft_exp_smooth.append(ts.forecast(how = 'exponential smoothing', param = es.param, num_gen = 1)[0][0])
 
 # Adding true values to the df

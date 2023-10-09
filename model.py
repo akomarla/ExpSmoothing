@@ -5,18 +5,6 @@ Created on Thu Aug 10 11:23:50 2023
 @author: akomarla
 """
 
-import pandas as pd
-import numpy as np
-import logging
-import os
-import pyodbc as po
-from datetime import datetime
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
-import sklearn.metrics as metrics
-from sklearn.model_selection import train_test_split
-
 
 class TimeSeries:
     def __init__(self, values, labels):
@@ -58,6 +46,7 @@ class TimeSeries:
         # Replacing the original time-series with the modified one
         if inplace:
             self.values = nz
+            return self.values
         # Retaining the original time-series and returning the modified one
         else:
             return nz
@@ -85,6 +74,7 @@ class TimeSeries:
         # Replacing the original time-series with the modified one
         if inplace:
             self.values = pv
+            return self.values
         # Retaining the original time-series and returning the modified one
         else:
             return pv
@@ -119,23 +109,73 @@ class TimeSeries:
         # Replacing the original time-series with the modified one
         if inplace:
             self.values = wna
+            return self.values
         # Retaining the original time-series and returning the modified one
         else:
             return wna
+    
+    def detect_outliers(self):
+        """
+
+        Returns
+        -------
+        outliers : list
+            outlier values generated using the percentile and IQR method
+
+        """
+        values = np.sort(self.values)
+        # Quartile ranges
+        q1 = np.percentile(values, 25, method = 'midpoint') 
+        q3 = np.percentile(values, 75, method = 'midpoint')
+        # Inter quartile range
+        iqr = q3 - q1
+        # Limits
+        low_lim = q1 - 1.5 * iqr
+        up_lim = q3 + 1.5 * iqr
+        # Find outliers
+        outliers = []
+        for v in values:
+            if v < low_lim or v > up_lim:
+                outliers.append(v)
+        # Assign outlier values to instance
+        self.outliers = outliers
+        return outliers
+    
+    def remove_outliers(self, inplace = False):
+        """
+
+        Parameters
+        ----------
+        inplace : boolean, optional
+            specify whether to replace the time-series values with modified values or not. The default is False.
+
+        Returns
+        -------
+        woo : list
+            time-series values without the outliers (original time-series is replaced if inplace = True)
+
+        """
+        # Find the outlier values
+        _ = self.detect_outliers()
+        # Remove outliers from the time-series
+        woo = [v for v in self.values if v not in self.outliers]
+        # Replace time series values
+        if inplace:
+            self.values = woo
+            return self.values
+        else:
+            return woo
         
     def check(self):
         # Check if labels and values are of the same length (if labels is a valid attribute)
         if self.labels:
             if len(self.values) != len(self.labels):
-                print('Mismatch between labels and time-series values. Processing will be incorrect')
+                print('Mismatch between labels and time-series values. Processing may be incorrect')
         
     def length(self):
+        # Find the length of the time-series, i.e. the number of values 
         self.len = len(self.values)
         return self.len
-    
-    def plot(self):
-        plt.plot(x = self.values, y = self.labels)
-        plt.show()
         
 
 
@@ -168,7 +208,8 @@ class ExpSmoothing():
         ft = fit.forecast(num_gen)
         return ft
         
-    def train(self, train_data, train_true_values, error, num_gen):
+    def train(self, train_data, train_true_values, error, num_gen, 
+              remove_outliers = False, non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -181,7 +222,13 @@ class ExpSmoothing():
             type of error to use to train the model, ex: 'mean square error', 'mean absolute error'
         num_gen : int
             number of future values in the time-series to generate, ex: 1
-
+        remove_outliers : boolean, optional
+            remove outliers in the time-series to train the model. Default is False
+        non_neg : boolean, optional 
+            remove negative values in the time-series to train the model. Default is False
+        non_zero : boolean, optional 
+            remove zero values in the time-series to train the model. Default is False
+        
         Attributes
         -------
         param : dict
@@ -204,6 +251,13 @@ class ExpSmoothing():
                     _ts = TimeSeries(values = ts, labels = None)
                     # Make modifications to the time series
                     _ts.clean(inplace = True, drop_na = True)
+                    # Remove outliers and non-negative values if specified 
+                    if remove_outliers:
+                        _ = _ts.remove_outliers(inplace = True)
+                    if non_neg:
+                        _ = _ts.non_neg(inplace = True)
+                    if non_zero: 
+                        _ = _ts.non_zero(inplace = True)
                     # Run the model
                     ft = self.es_model(ts = _ts.values, smoothing_level = alpha, num_gen = self.num_gen)
                     ft_val.append(ft.tolist())
@@ -248,7 +302,8 @@ class ExpSmoothing():
         # Store the training error associated with the best alpha
         self.train_error = min(e_dict.values())
             
-    def test(self, test_data, test_true_values, error = None, num_gen = None, param = None):
+    def test(self, test_data, test_true_values, error = None, num_gen = None, param = None, 
+             remove_outliers = False, non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -269,6 +324,12 @@ class ExpSmoothing():
             contains parameters to test the model
             default is None
             ignore to test the model using the optimal parameters from the training process
+        remove_outliers : boolean, optional
+            remove outliers in the time-series to test the model. Default is False
+        non_neg : boolean, optional 
+            remove negative values in the time-series to test the model. Default is False
+        non_zero : boolean, optional 
+            remove zero values in the time-series to test the model. Default is False
 
         Returns
         -------
@@ -299,6 +360,13 @@ class ExpSmoothing():
                 _ts = TimeSeries(values = ts, labels = None)
                 # Make modifications to the time series
                 _ts.clean(inplace = True, drop_na = True)
+                # Remove outliers and non-negative values if specified 
+                if remove_outliers:
+                    _ = _ts.remove_outliers(inplace = True)
+                if non_neg:
+                    _ = _ts.non_neg(inplace = True)
+                if non_zero: 
+                    _ = _ts.non_zero(inplace = True)
                 # Run the model
                 ft = self.es_model(ts = _ts.values, smoothing_level = param['alpha'], num_gen = num_gen)
                 ft_val.append(ft.tolist())
@@ -337,7 +405,7 @@ class ExpSmoothing():
             
         return ft_val, self.test_error
     
-    def predict(self, data, num_gen = None, param = None):
+    def predict(self, data, num_gen = None, param = None, remove_outliers = False, non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -347,12 +415,18 @@ class ExpSmoothing():
         num_gen : int, optional
             number of future values in the time-series to generate, ex: 1
             default is None
-            ignore to forecast values using the training input itself
+            ignore to forecast values using the training specifications itself
         param :  dict, optional
-            contains parameters to test the model
+            contains parameters to run the model
             default is None
-            ignore to forecast values using the optimal parameters from the training process
-
+            ignore to forecast values using the optimal parameters learned from model training process
+        remove_outliers : boolean, optional
+            remove outliers in the time-series. Default is False
+        non_neg : boolean, optional 
+            remove negative values in the time-series. Default is False
+        non_zero : boolean, optional 
+            remove zero values in the time-series. Default is False
+        
         Returns
         -------
         ft_val : list of lists of floats
