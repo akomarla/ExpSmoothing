@@ -10,7 +10,7 @@ Simple Exponential Smoothing can be interpreted as a weighted average of the tim
 ## Error metrics 
 Simply put, training the model involves finding the "alpha" value that minimizes the forecast error (difference between true and forecasted values). In this implementation, one can choose from the following error metrics to obtain the optimal "alpha" value:
 
-<img src= "https://github.com/akomarla/ExpSmoothing/assets/124313756/15ee78b6-024c-4f49-b730-2d40dba3fb46" width = "35%" height = "35%">
+<img src= "https://github.com/akomarla/ExpSmoothing/assets/124313756/15ee78b6-024c-4f49-b730-2d40dba3fb46" width = "40%" height = "40%">
 
 Where n represents the number of time-series in the data set, and e is the difference between the true and forecasted values for a particular time series. 
 
