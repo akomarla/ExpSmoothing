@@ -14,11 +14,11 @@ Learn more here: https://btsa.medium.com/introduction-to-exponential-smoothing-9
 ## Error metrics 
 Simply put, training the model involves finding the "alpha" value that minimizes the forecast error (difference between true and forecasted values). In this implementation, one can choose from the following error metrics to obtain the optimal "alpha" value:
 | Error | Parameter | Formula |
-| ------------ | -------------- | --------- |
-| Mean Squared Error (MSE) | ```mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a58bc3d7-6661-4995-825d-b031bd62016a" width = "85%" height = "85%"> <tr></tr> |
-| Root Mean Squared Error (RMSE) | ```root mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/13106816-f256-4e74-ad06-b20470cc6f74" width = "95%" height = "95%"> <tr></tr> |
-| Mean Absolute Error (MAE) | ```mean absolute error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a5821e63-0020-4fa2-aea7-993ba6c6babe" width = "85%" height = "85%"> <tr></tr> |
-| Mean Absolute Percentage Error (MAPE) | ```mean absolute percentage error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/4825f7e2-f0c6-4396-b27f-2333542f2d84" width = "95%" height = "95%"> <tr></tr> |
+| ------------ | ------------------- | --------- |
+| Mean Squared Error (MSE) | ```mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a58bc3d7-6661-4995-825d-b031bd62016a" width = "45%" height = "45%"> <tr></tr> |
+| Root Mean Squared Error (RMSE) | ```root mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/13106816-f256-4e74-ad06-b20470cc6f74" width = "45%" height = "45%"> <tr></tr> |
+| Mean Absolute Error (MAE) | ```mean absolute error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a5821e63-0020-4fa2-aea7-993ba6c6babe" width = "45%" height = "45%"> <tr></tr> |
+| Mean Absolute Percentage Error (MAPE) | ```mean absolute percentage error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/4825f7e2-f0c6-4396-b27f-2333542f2d84" width = "45%" height = "45%"> <tr></tr> |
 
 Where n represents the number of time-series in the data set. 
 
