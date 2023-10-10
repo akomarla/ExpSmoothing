@@ -15,8 +15,13 @@ Learn more here: https://btsa.medium.com/introduction-to-exponential-smoothing-9
 
 ## Error metrics 
 Simply put, training the model involves finding the "alpha" value that minimizes the forecast error (difference between true and forecasted values). In this implementation, one can choose from the following error metrics to obtain the optimal "alpha" value:
+| Error | Parameter | Formula | More information |
+| ------------ | -------------- | --------- |--------- |
+| Mean Squared Error (MSE) | ```mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a58bc3d7-6661-4995-825d-b031bd62016a" width = "80%" height = "80%"> | https://en.wikipedia.org/wiki/Mean_squared_error |
+| Root Mean Squared Error (RMSE) | ```root mean squared error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/13106816-f256-4e74-ad06-b20470cc6f74" width = "80%" height = "80%"> | https://towardsdatascience.com/what-does-rmse-really-mean-806b65f2e48e |
+| Mean Absolute Error (MAE) | ```mean absolute error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/a5821e63-0020-4fa2-aea7-993ba6c6babe" width = "80%" height = "80%"> | https://en.wikipedia.org/wiki/Mean_absolute_error |
+| Mean Absolute Percentage Error (MAPE) | ```mean absolute percentage error``` | <img src = "https://github.com/akomarla/ExpSmoothing/assets/124313756/4825f7e2-f0c6-4396-b27f-2333542f2d84" width = "80%" height = "80%"> | https://en.wikipedia.org/wiki/Mean_absolute_error |
 
-<img src= "https://github.com/akomarla/ExpSmoothing/assets/124313756/15ee78b6-024c-4f49-b730-2d40dba3fb46" width = "40%" height = "40%">
 
 Where n represents the number of time-series in the data set, and e is the difference between the true and forecasted values for a particular time series. 
 
