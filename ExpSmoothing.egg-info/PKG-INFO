@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: ExpSmoothing
+Version: 0.0.1
+Summary: Exponential smoothing forecast model
+Home-page: https://github.com/akomarla/ExpSmoothing
+Author: Aparna Komarla
+Author-email: <aparna.komarla@email.com>
+License: UNKNOWN
+Keywords: python,time-series
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Education
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+License-File: LICENSE
+
+Training and testing an exponential smoothing forecast model for time-series data using statistical learning
+
