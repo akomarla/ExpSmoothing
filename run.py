@@ -2,13 +2,24 @@
 
 ##############################################################################################################################################################
 
+# Parameters
+
+# Length of time-series to use
+ts_len = 401
+# Path to write the .csv results
+write_path = '...../data/results/forecasts.csv'
+
+##############################################################################################################################################################
+
+# Training and testing data
+
 # Getting training time series from M4 forecasting competition training set
 url = 'https://raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset/Train/Daily-train.csv'
 # Get training data as dataframes
 raw = pd.read_csv(url)
-cols = ['V'+str(i) for i in range(2,401)]
+cols = ['V'+str(i) for i in range(2,ts_len)]
 train = raw[cols]
-train_true = raw['V401']
+train_true = raw['V'+str(ts_len)]
 # Convert to correct data type to run the model 
 train = train.values.tolist()
 train_true = [[val] for val in train_true.tolist()]
@@ -17,14 +28,16 @@ train_true = [[val] for val in train_true.tolist()]
 url = 'https://raw.githubusercontent.com/Mcompetitions/M4-methods/master/Dataset/Train/Daily-train.csv'
 # Get testing data as dataframes
 raw = pd.read_csv(url)
-cols = ['V'+str(i) for i in range(2,401)]
+cols = ['V'+str(i) for i in range(2,ts_len)]
 test = raw[cols]
-test_true = raw['V401']
+test_true = raw['V'+str(ts_len)]
 # Convert to correct data type to run the model 
 test = test.values.tolist()
 test_true = [[val] for val in test_true.tolist()]
 
-###############################################################################
+##############################################################################################################################################################
+
+# Build the model 
 
 # Train the exponential smoothing model - learn the best alpha parameter by minimizing the mean abs % error
 es = ExpSmoothing()
@@ -49,7 +62,9 @@ print('Error used for training:', es.error)
 print('Training error:', es.train_error)
 print('Testing error:', es.test_error)
 
-###############################################################################
+##############################################################################################################################################################
+
+# Compare exponential smoothing results with average
 
 # Analyze and predict future values
 ft = pd.DataFrame()
@@ -79,8 +94,10 @@ ft['Average (diff)'] = ft['true'] - ft['Average']
 ft['Exponential smoothing forecast'] = ft_exp_smooth
 ft['Exponential smoothing forecast (diff)'] = ft['true'] - ft['Exponential smoothing forecast']
 
-# Write results to Excel
-ft.to_excel('...data/results/forecasts.xlsx')
+##############################################################################################################################################################
 
-###############################################################################
+# Write results to csv file
+ft.to_csv(write_path)
+
+##############################################################################################################################################################
   
