@@ -127,8 +127,12 @@ class TimeSeries:
         else:
             return wna
     
-    def detect_outliers(self):
+    def detect_outliers(self, how):
         """
+        Parameters
+        ----------
+        how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
 
         Returns
         -------
@@ -136,29 +140,47 @@ class TimeSeries:
             outlier values generated using the percentile and IQR method
 
         """
+        # Get the time-series values
         values = np.sort(self.values)
-        # Quartile ranges
-        q1 = np.percentile(values, 25, method = 'midpoint') 
-        q3 = np.percentile(values, 75, method = 'midpoint')
-        # Inter quartile range
-        iqr = q3 - q1
-        # Limits
-        low_lim = q1 - 1.5 * iqr
-        up_lim = q3 + 1.5 * iqr
-        # Find outliers
-        outliers = []
-        for v in values:
-            if v < low_lim or v > up_lim:
-                outliers.append(v)
-        # Assign outlier values to instance
-        self.outliers = outliers
-        return outliers
+        # Use IQR method
+        if how == 'iqr':
+            # Quartile ranges
+            q1 = np.percentile(values, 25, method = 'midpoint') 
+            q3 = np.percentile(values, 75, method = 'midpoint')
+            # Inter quartile range
+            iqr = q3 - q1
+            # Limits
+            low_lim = q1 - 1.5 * iqr
+            up_lim = q3 + 1.5 * iqr
+            # Find outliers
+            outliers = []
+            for v in values:
+                if v < low_lim or v > up_lim:
+                    outliers.append(v)
+            # Assign outlier values to instance
+            self.outliers = outliers
+            return outliers
+        # Use only percentiles
+        if how == 'percentile':
+            # Quartile ranges
+            q1 = np.percentile(values, 25, method = 'midpoint') 
+            q3 = np.percentile(values, 75, method = 'midpoint')
+            # Find outliers
+            outliers = []
+            for v in values:
+                if v < q1 or v > q3:
+                    outliers.append(v)
+            # Assign outlier values to instance
+            self.outliers = outliers
+            return outliers
     
-    def remove_outliers(self, inplace = False):
+    def remove_outliers(self, how, inplace = False):
         """
 
         Parameters
         ----------
+        how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
         inplace : boolean, optional
             specify whether to replace the time-series values with modified values or not. The default is False.
 
@@ -169,7 +191,7 @@ class TimeSeries:
 
         """
         # Find the outlier values
-        _ = self.detect_outliers()
+        _ = self.detect_outliers(how = how)
         # Remove outliers from the time-series
         woo = [v for v in self.values if v not in self.outliers]
         # Replace time series values
@@ -222,7 +244,7 @@ class ExpSmoothing():
         return ft
         
     def train(self, train_data, train_true_values, error, num_gen, 
-              remove_outliers = False, non_neg = False, non_zero = False):
+              remove_outliers = False, how = 'percentile', non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -237,6 +259,8 @@ class ExpSmoothing():
             number of future values in the time-series to generate, ex: 1
         remove_outliers : boolean, optional
             remove outliers in the time-series to train the model. Default is False
+        how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'. Default is 'percentile'
         non_neg : boolean, optional 
             remove negative values in the time-series to train the model. Default is False
         non_zero : boolean, optional 
@@ -266,7 +290,7 @@ class ExpSmoothing():
                     _ts.clean(inplace = True, drop_na = True)
                     # Remove outliers and non-negative values if specified 
                     if remove_outliers:
-                        _ = _ts.remove_outliers(inplace = True)
+                        _ = _ts.remove_outliers(how, inplace = True)
                     if non_neg:
                         _ = _ts.non_neg(inplace = True)
                     if non_zero: 
@@ -316,7 +340,7 @@ class ExpSmoothing():
         self.train_error = min(e_dict.values())
             
     def test(self, test_data, test_true_values, error = None, num_gen = None, param = None, 
-             remove_outliers = False, non_neg = False, non_zero = False):
+             remove_outliers = False, how = 'percentile', non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -339,6 +363,9 @@ class ExpSmoothing():
             ignore to test the model using the optimal parameters from the training process
         remove_outliers : boolean, optional
             remove outliers in the time-series to test the model. Default is False
+        how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
+            default is 'percentile'
         non_neg : boolean, optional 
             remove negative values in the time-series to test the model. Default is False
         non_zero : boolean, optional 
@@ -375,7 +402,7 @@ class ExpSmoothing():
                 _ts.clean(inplace = True, drop_na = True)
                 # Remove outliers and non-negative values if specified 
                 if remove_outliers:
-                    _ = _ts.remove_outliers(inplace = True)
+                    _ = _ts.remove_outliers(how = how, inplace = True)
                 if non_neg:
                     _ = _ts.non_neg(inplace = True)
                 if non_zero: 
@@ -418,7 +445,7 @@ class ExpSmoothing():
             
         return ft_val, self.test_error
     
-    def predict(self, data, num_gen = None, param = None, remove_outliers = False, non_neg = False, non_zero = False):
+    def predict(self, data, num_gen = None, param = None, remove_outliers = False, how = 'percentile', non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -435,6 +462,9 @@ class ExpSmoothing():
             ignore to forecast values using the optimal parameters learned from model training process
         remove_outliers : boolean, optional
             remove outliers in the time-series. Default is False
+        how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
+            default is 'percentile'
         non_neg : boolean, optional 
             remove negative values in the time-series. Default is False
         non_zero : boolean, optional 
@@ -460,6 +490,13 @@ class ExpSmoothing():
                 _ts = TimeSeries(values = ts, labels = None)
                 # Make modifications to the time series
                 _ts.clean(inplace = True, drop_na = True)
+                # Remove outliers and non-negative values if specified 
+                if remove_outliers:
+                    _ = _ts.remove_outliers(how = how, inplace = True)
+                if non_neg:
+                    _ = _ts.non_neg(inplace = True)
+                if non_zero: 
+                    _ = _ts.non_zero(inplace = True)
                 ft = self.es_model(ts = _ts.values, smoothing_level = param['alpha'], num_gen = num_gen)
                 ft_val.append(ft.tolist())
             except:
@@ -513,7 +550,7 @@ class Analyze(TimeSeries, ExpSmoothing):
             except:
                 return np.nan
         
-    def forecast(self, how, num_gen = None, param = None):
+    def forecast(self, how, num_gen = None, param = None, remove_outliers = False, outliers_how = 'percentile', non_neg = False, non_zero = False):
         """
 
         Parameters
@@ -524,6 +561,15 @@ class Analyze(TimeSeries, ExpSmoothing):
             number of future values to generate using exponential smoothing forecast, ex: 1,2. Default is None
         param : dict, optional
             parameters needed for the exponential smoothing forecast, ex: {'alpha': 0.5}. Default is None
+        remove_outliers : boolean, optional
+            remove outliers in the time-series. Default is False
+        outliers_how : str
+            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
+            default is 'percentile'
+        non_neg : boolean, optional 
+            remove negative values in the time-series. Default is False
+        non_zero : boolean, optional 
+            remove zero values in the time-series. Default is False
 
         Returns
         -------
@@ -542,7 +588,9 @@ class Analyze(TimeSeries, ExpSmoothing):
         elif how == 'average non-neg':
             return self.average(non_neg = True)
         elif how == 'exponential smoothing':
-            return self.predict(data = [self.values], num_gen = num_gen, param = param)
+            return self.predict(data = [self.values], num_gen = num_gen, param = param,
+                                remove_outliers = remove_outliers, how = outliers_how, 
+                                non_neg = non_neg, non_zero = non_zero)
 
 
 
