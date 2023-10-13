@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 setup(
        # the name must match the folder name 'verysimplemodule'
         name="ExpSmoothing", 
-        version='0.0.1',
+        version='0.0.4',
         author="Aparna Komarla",
         author_email="<aparna.komarla@email.com>",
         description='Exponential smoothing forecast model',
