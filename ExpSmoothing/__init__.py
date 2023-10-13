@@ -20,6 +20,6 @@ from sklearn.model_selection import train_test_split
 from scipy import stats
 
 # Model methods
-from ExpSmoothing import TimeSeries
-from ExpSmoothing import TimeInstance
-from ExpSmoothing import ExpSmoothing
+from .model import TimeSeries
+from .model import TimeInstance
+from .model import ExpSmoothing

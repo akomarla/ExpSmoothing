@@ -15,13 +15,13 @@ long_description = (this_directory / "README.md").read_text()
 # Setting up
 setup(
         name="ExpSmoothing", 
-        version='0.0.7',
+        version='0.0.8',
         author="Aparna Komarla",
         author_email="<aparna.komarla@email.com>",
         description='Exponential smoothing forecast model',
         long_description=long_description,
         long_description_content_type='text/markdown',
-        packages=find_packages(include = ['model', 'model.*']),
+        packages=find_packages(include = ['ExpSmoothing', 'ExpSmoothing.*']),
         install_requires=[], # add any additional packages that 
         # needs to be installed along with your package. Eg: 'caer'
         licenses='MIT',
