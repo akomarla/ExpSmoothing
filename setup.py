@@ -6,22 +6,27 @@ Created on Tue Oct 10 14:14:41 2023
 """
 
 from setuptools import setup, find_packages
+from pathlib import Path
+
+# Getting directory info
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 # Setting up
 setup(
-       # the name must match the folder name 'verysimplemodule'
         name="ExpSmoothing", 
-        version='0.0.4',
+        version='0.0.5',
         author="Aparna Komarla",
         author_email="<aparna.komarla@email.com>",
         description='Exponential smoothing forecast model',
-        long_description='Training and testing an exponential smoothing forecast model for time-series data using statistical learning',
-        packages=find_packages(),
+        long_description=long_description,
+        long_description_content_type='text/markdown',
+        packages=find_packages(include = ['ExpSmoothing', 'ExpSmoothing.*']),
         install_requires=[], # add any additional packages that 
         # needs to be installed along with your package. Eg: 'caer'
         licenses='MIT',
         url= 'https://github.com/akomarla/ExpSmoothing',
-        keywords=['python', 'time-series'],
+        keywords=['python', 'time-series', 'forecasting', 'exponential smoothing', 'error metrics'],
         classifiers= [
             "Development Status :: 3 - Alpha",
             "Intended Audience :: Education",
