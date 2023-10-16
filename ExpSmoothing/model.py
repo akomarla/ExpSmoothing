@@ -294,13 +294,13 @@ class ExpSmoothing():
                     _ts = TimeSeries(values = ts, labels = None)
                     # Make modifications to the time series
                     _ts.clean(inplace = True, drop_na = True)
-                    # Remove outliers and non-negative values if specified 
-                    if remove_outliers:
-                        _ = _ts.remove_outliers(how, inplace = True)
+                    # Remove outliers and non-negative values if specified
                     if non_neg:
                         _ = _ts.non_neg(inplace = True)
                     if non_zero: 
                         _ = _ts.non_zero(inplace = True)
+                    if remove_outliers:
+                        _ = _ts.remove_outliers(how, inplace = True)
                     # Run the model
                     ft = self.es_model(ts = _ts.values, smoothing_level = alpha, num_gen = self.num_gen)
                     ft_val.append(ft.tolist())
@@ -407,12 +407,12 @@ class ExpSmoothing():
                 # Make modifications to the time series
                 _ts.clean(inplace = True, drop_na = True)
                 # Remove outliers and non-negative values if specified 
-                if remove_outliers:
-                    _ = _ts.remove_outliers(how = how, inplace = True)
                 if non_neg:
                     _ = _ts.non_neg(inplace = True)
                 if non_zero: 
                     _ = _ts.non_zero(inplace = True)
+                if remove_outliers:
+                    _ = _ts.remove_outliers(how = how, inplace = True)
                 # Run the model
                 ft = self.es_model(ts = _ts.values, smoothing_level = param['alpha'], num_gen = num_gen)
                 ft_val.append(ft.tolist())
@@ -497,12 +497,12 @@ class ExpSmoothing():
                 # Make modifications to the time series
                 _ts.clean(inplace = True, drop_na = True)
                 # Remove outliers and non-negative values if specified 
-                if remove_outliers:
-                    _ = _ts.remove_outliers(how = how, inplace = True)
                 if non_neg:
                     _ = _ts.non_neg(inplace = True)
                 if non_zero: 
                     _ = _ts.non_zero(inplace = True)
+                if remove_outliers:
+                    _ = _ts.remove_outliers(how = how, inplace = True)
                 ft = self.es_model(ts = _ts.values, smoothing_level = param['alpha'], num_gen = num_gen)
                 ft_val.append(ft.tolist())
             except:
