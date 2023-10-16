@@ -132,48 +132,54 @@ class TimeSeries:
         Parameters
         ----------
         how : str
-            specify whether to remove outliers using the IQR method: 'iqr' or just percentiles: 'percentile'
+            specify whether to remove outliers using the IQR method: 'iqr' or plain percentiles: 'percentile'
 
         Returns
         -------
         outliers : list
-            outlier values generated using the percentile and IQR method
+            outlier values generated using the percentile or IQR method ONLY if there are more than two values in the input time-series
 
         """
         # Get the time-series values
         values = np.sort(self.values)
-        # Use IQR method
-        if how == 'iqr':
-            # Quartile ranges
-            q1 = np.percentile(values, 25, method = 'midpoint') 
-            q3 = np.percentile(values, 75, method = 'midpoint')
-            # Inter quartile range
-            iqr = q3 - q1
-            # Limits
-            low_lim = q1 - 1.5 * iqr
-            up_lim = q3 + 1.5 * iqr
-            # Find outliers
-            outliers = []
-            for v in values:
-                if v < low_lim or v > up_lim:
-                    outliers.append(v)
-            # Assign outlier values to instance
-            self.outliers = outliers
-            return outliers
-        # Use only percentiles
-        if how == 'percentile':
-            # Quartile ranges
-            q1 = np.percentile(values, 25, method = 'midpoint') 
-            q3 = np.percentile(values, 75, method = 'midpoint')
-            # Find outliers
-            outliers = []
-            for v in values:
-                if v < q1 or v > q3:
-                    outliers.append(v)
-            # Assign outlier values to instance
-            self.outliers = outliers
-            return outliers
-    
+        
+        # Check outliers only if there are more than 2 values in the time-series
+        if len(values) > 2: 
+            # Use IQR method
+            if how == 'iqr':
+                # Quartile ranges
+                q1 = np.percentile(values, 25, method = 'midpoint') 
+                q3 = np.percentile(values, 75, method = 'midpoint')
+                # Inter quartile range
+                iqr = q3 - q1
+                # Limits
+                low_lim = q1 - 1.5 * iqr
+                up_lim = q3 + 1.5 * iqr
+                # Find outliers
+                outliers = []
+                for v in values:
+                    if v < low_lim or v > up_lim:
+                        outliers.append(v)
+                # Assign outlier values to instance
+                self.outliers = outliers
+                return outliers
+            # Use only percentiles
+            if how == 'percentile':
+                # Quartile ranges
+                q1 = np.percentile(values, 25, method = 'midpoint') 
+                q3 = np.percentile(values, 75, method = 'midpoint')
+                # Find outliers
+                outliers = []
+                for v in values:
+                    if v < q1 or v > q3:
+                        outliers.append(v)
+                # Assign outlier values to instance
+                self.outliers = outliers
+                return outliers
+        # If there are less than or equal to 2 values in the time-series then outliers will be NaN
+        else:
+            return [np.nan]
+        
     def remove_outliers(self, how, inplace = False):
         """
 
