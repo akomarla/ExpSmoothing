@@ -342,8 +342,10 @@ class ExpSmoothing():
         self.param['alpha'] = min(e_dict, key = e_dict.get)
         # Store the chosen error type
         self.error = error
-        # Store the training error associated with the best alpha
+        # Store the training error associated with the best alpha values
         self.train_error = min(e_dict.values())
+        # Store all the training erros and alpha parameter values
+        self.train_log = e_dict
             
     def test(self, test_data, test_true_values, error = None, num_gen = None, param = None, 
              remove_outliers = False, how = 'percentile', non_neg = False, non_zero = False):
@@ -936,7 +938,7 @@ class TimeInstance:
         fill : list
             year and quarter values, ex: ['2021Q4', '2021Q3', '2021Q2'....]
         """
-        return self.gen_quart_range(how = 'backward', num = num)[-1]
+        return self.gen_quart_range(how = 'backward', num = num)[0]
     
     def add_months(self, num, index = None):
         """
@@ -969,4 +971,4 @@ class TimeInstance:
         fill : list
             year and month values, ex: ['202104', '202103', '202102'....]
         """
-        return self.gen_month_range(how = 'backward', num = num, index = index)[-1]
+        return self.gen_month_range(how = 'backward', num = num, index = index)[0]

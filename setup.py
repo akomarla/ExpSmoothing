@@ -15,16 +15,15 @@ long_description = (this_directory / "README.md").read_text()
 # Setting up
 setup(
         name="ExpSmoothing", 
-        version='0.1.6',
+        version='0.1.7',
         author="Aparna Komarla",
         author_email="<aparna.komarla@email.com>",
         description='Exponential smoothing forecast model',
         long_description=long_description,
         long_description_content_type='text/markdown',
         packages=find_packages(include = ['ExpSmoothing', 'ExpSmoothing.*']),
-        install_requires=[], # add any additional packages that 
-        # needs to be installed along with your package. Eg: 'caer'
-        licenses='MIT',
+        install_requires=[], 
+        licenses='Creative Commons',
         url= 'https://github.com/akomarla/ExpSmoothing',
         keywords=['python', 'time-series', 'forecasting', 'exponential smoothing', 'error metrics'],
         classifiers= [
