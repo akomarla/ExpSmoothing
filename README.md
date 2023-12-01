@@ -7,7 +7,7 @@ Learn more here: https://machinelearningmastery.com/exponential-smoothing-for-ti
 Download and run the package on your local system. Python version 3.10.0 or greater is advised.
 
 # Model 
-Simple Exponential Smoothing can be interpreted as a weighted average of the time-series values, wherein the weights are either exponentially increasing (greater importance to future values in the time-series) or exponentially decreasing (greater importance to earlier values in the time-series). The "alpha" value or the smoothing parameter lies between 0 and 1: the greater the value of alpha, the greater is the exponentially increasing nature of the weights.
+Simple Exponential Smoothing can be interpreted as a weighted sum of the time-series values wherein the weights are exponentially increasing (greater importance to future values in the time-series). The "alpha" value or the smoothing parameter lies between 0 and 1: the alpha value is directly proportional to the exponentially increasing nature of the weights.
 
 Learn more here: https://btsa.medium.com/introduction-to-exponential-smoothing-9c2d5909a714
 
