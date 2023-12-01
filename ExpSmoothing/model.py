@@ -249,7 +249,7 @@ class ExpSmoothing():
         ft = fit.forecast(num_gen)
         return ft
         
-    def train(self, train_data, train_true_values, error, num_gen, 
+    def train(self, train_data, train_true_values, num_gen = 1, error = 'mean absolute percentage error', 
               remove_outliers = False, how = 'percentile', non_neg = False, non_zero = False):
         """
 
@@ -260,9 +260,9 @@ class ExpSmoothing():
         train_true_values : list of lists of floats
             true future values of the training data, ex: [[4,5], [7,8],...]
         error : string
-            type of error to use to train the model, ex: 'mean square error', 'mean absolute error'
+            type of error to use to train the model, ex: 'mean square error', 'mean absolute error'. Default is 'mean absolute error'
         num_gen : int
-            number of future values in the time-series to generate, ex: 1
+            number of future values in the time-series to generate, ex: 1. Default is 1.
         remove_outliers : boolean, optional
             remove outliers in the time-series to train the model. Default is False
         how : str

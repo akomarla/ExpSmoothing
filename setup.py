@@ -15,7 +15,7 @@ long_description = (this_directory / "README.md").read_text()
 # Setting up
 setup(
         name="ExpSmoothing", 
-        version='0.1.7',
+        version='0.1.8',
         author="Aparna Komarla",
         author_email="<aparna.komarla@email.com>",
         description='Exponential smoothing forecast model',
